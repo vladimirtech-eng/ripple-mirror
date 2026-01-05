@@ -32671,31 +32671,17 @@ const RI = "ripple-login-dismissed",
           ],
         }),
         m && d && w.jsx(Gq, { dayNumber: e, hintUsed: a }),
-        c && !m && w.jsx(MI, { onDismiss: () => u(!1) }),
       ],
     });
   },
   Jq = () => {
-    const [e, t] = S.useState(L_());
     return (
-      S.useEffect(() => {
-        const r = setInterval(() => {
-          t(L_());
-        }, 1e3);
-        return () => clearInterval(r);
-      }, []),
-      w.jsxs("div", {
+      w.jsx("div", {
         className: "text-center pt-4 border-t border-border",
-        children: [
-          w.jsx("p", {
-            className: "text-sm text-muted-foreground mb-1",
-            children: "Next puzzle in",
-          }),
-          w.jsx("p", {
-            className: "text-xl font-mono font-medium text-foreground",
-            children: e,
-          }),
-        ],
+        children: w.jsx("p", {
+          className: "text-lg font-medium text-foreground",
+          children: "View next puzzle!",
+        }),
       })
     );
   };
