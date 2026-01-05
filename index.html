@@ -127,48 +127,56 @@
           }
 
           // Add footer
-          const footer = document.createElement('footer');
-          footer.innerHTML = `
-            <style>
-              footer.copyright {
-                text-align: center;
-                padding: 24px 16px;
-                font-size: 12px;
-                color: hsl(var(--muted-foreground));
-              }
-              footer.copyright a {
-                color: inherit;
-                text-decoration: underline;
-              }
-              footer.copyright a:hover {
-                color: hsl(var(--foreground));
-              }
-            </style>
-            All content &copy; <a href="https://ripplegame.app" target="_blank">ripplegame.app</a>
-          `;
-          footer.className = 'copyright';
-          document.querySelector('.container.max-w-lg').appendChild(footer);
+          const footerContainer = document.querySelector('.container.max-w-lg') || document.querySelector('.container') || document.getElementById('root');
+          if (footerContainer) {
+            const footer = document.createElement('footer');
+            footer.innerHTML = `
+              <style>
+                footer.copyright {
+                  text-align: center;
+                  padding: 24px 16px;
+                  font-size: 12px;
+                  color: hsl(var(--muted-foreground));
+                }
+                footer.copyright a {
+                  color: inherit;
+                  text-decoration: underline;
+                }
+                footer.copyright a:hover {
+                  color: hsl(var(--foreground));
+                }
+              </style>
+              All content &copy; <a href="https://ripplegame.app" target="_blank">ripplegame.app</a>
+            `;
+            footer.className = 'copyright';
+            footerContainer.appendChild(footer);
+          }
 
-          document.getElementById('go-level').addEventListener('click', function() {
-            const newLevel = document.getElementById('level-input').value;
-            if (newLevel && newLevel > 0) {
-              // Preserve hasSeenTutorial flag when switching levels
-              try {
-                const state = JSON.parse(localStorage.getItem('ripple-game-state') || '{}');
-                const hasSeenTutorial = state.hasSeenTutorial;
-                localStorage.setItem('ripple-game-state', JSON.stringify({ hasSeenTutorial }));
-              } catch(e) {
-                localStorage.removeItem('ripple-game-state');
-              }
-              window.location.href = '?level=' + newLevel;
-            }
-          });
+          const goBtn = document.getElementById('go-level');
+          const levelInput = document.getElementById('level-input');
 
-          document.getElementById('level-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-              document.getElementById('go-level').click();
-            }
-          });
+          if (goBtn && levelInput) {
+            goBtn.addEventListener('click', function() {
+              const newLevel = levelInput.value;
+              if (newLevel && newLevel > 0) {
+                // Preserve hasSeenTutorial flag when switching levels
+                try {
+                  const state = JSON.parse(localStorage.getItem('ripple-game-state') || '{}');
+                  const hasSeenTutorial = state.hasSeenTutorial;
+                  localStorage.setItem('ripple-game-state', JSON.stringify({ hasSeenTutorial }));
+                } catch(e) {
+                  localStorage.removeItem('ripple-game-state');
+                }
+                window.location.href = '?level=' + newLevel;
+              }
+            });
+
+            levelInput.addEventListener('keypress', function(e) {
+              if (e.key === 'Enter') {
+                goBtn.click();
+              }
+            });
+          }
         });
       })();
     </script>
@@ -218,11 +226,6 @@
       crossorigin=""
       href="Ripple%20-%20Daily%20Cause%20&amp;%20Effect%20Puzzle%20Game_files/index-1XLbNvcA.css"
     />
-    <script
-      defer="defer"
-      src="Ripple%20-%20Daily%20Cause%20&amp;%20Effect%20Puzzle%20Game_files/~flock.js"
-      data-proxy-url="https://ripplegame.app/~api/analytics"
-    ></script>
     <style type="text/css">
       :where(html[dir="ltr"]),
       :where([data-sonner-toaster][dir="ltr"]) {
