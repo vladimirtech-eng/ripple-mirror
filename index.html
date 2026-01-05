@@ -173,23 +173,28 @@
               const currentLvl = parseInt(params.get('level'), 10) || getCurrentDayNumber();
               const nextLevel = currentLvl + 1;
 
-              const btn = document.createElement('a');
-              btn.href = '?level=' + nextLevel;
-              btn.className = 'next-puzzle-btn';
-              btn.textContent = 'Next Puzzle';
-              btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                try {
-                  const state = JSON.parse(localStorage.getItem('ripple-game-state') || '{}');
-                  const hasSeenTutorial = state.hasSeenTutorial;
-                  localStorage.setItem('ripple-game-state', JSON.stringify({ hasSeenTutorial }));
-                } catch(err) {
-                  localStorage.removeItem('ripple-game-state');
-                }
-                window.location.href = '?level=' + nextLevel;
-              });
+              // Check if we're at the last puzzle
+              if (currentLvl >= MAX_LEVEL) {
+                nextPuzzleText.textContent = 'No more puzzles!';
+              } else {
+                const btn = document.createElement('a');
+                btn.href = '?level=' + nextLevel;
+                btn.className = 'next-puzzle-btn';
+                btn.textContent = 'Next Puzzle';
+                btn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  try {
+                    const state = JSON.parse(localStorage.getItem('ripple-game-state') || '{}');
+                    const hasSeenTutorial = state.hasSeenTutorial;
+                    localStorage.setItem('ripple-game-state', JSON.stringify({ hasSeenTutorial }));
+                  } catch(err) {
+                    localStorage.removeItem('ripple-game-state');
+                  }
+                  window.location.href = '?level=' + nextLevel;
+                });
 
-              nextPuzzleText.replaceWith(btn);
+                nextPuzzleText.replaceWith(btn);
+              }
             }
           });
           observer.observe(document.body, { childList: true, subtree: true });
