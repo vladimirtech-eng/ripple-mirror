@@ -136,31 +136,33 @@
             validateLevel();
           }
 
-          // Add footer
-          const footerContainer = document.querySelector('.container.max-w-lg') || document.querySelector('.container') || document.getElementById('root');
-          if (footerContainer) {
-            const footer = document.createElement('footer');
-            footer.innerHTML = `
-              <style>
-                footer.copyright {
-                  text-align: center;
-                  padding: 24px 16px;
-                  font-size: 12px;
-                  color: hsl(var(--muted-foreground));
-                }
-                footer.copyright a {
-                  color: inherit;
-                  text-decoration: underline;
-                }
-                footer.copyright a:hover {
-                  color: hsl(var(--foreground));
-                }
-              </style>
-              All content &copy; <a href="https://ripplegame.app" target="_blank">ripplegame.app</a>
-            `;
-            footer.className = 'copyright';
-            footerContainer.appendChild(footer);
-          }
+          // Add footer - use setTimeout to wait for React to finish rendering
+          setTimeout(function() {
+            const footerContainer = document.querySelector('.container.max-w-lg') || document.querySelector('.container') || document.getElementById('root');
+            if (footerContainer) {
+              const footer = document.createElement('footer');
+              footer.innerHTML = `
+                <style>
+                  footer.copyright {
+                    text-align: center;
+                    padding: 24px 16px;
+                    font-size: 12px;
+                    color: hsl(var(--muted-foreground));
+                  }
+                  footer.copyright a {
+                    color: inherit;
+                    text-decoration: underline;
+                  }
+                  footer.copyright a:hover {
+                    color: hsl(var(--foreground));
+                  }
+                </style>
+                All content &copy; <a href="https://ripplegame.app" target="_blank">ripplegame.app</a>
+              `;
+              footer.className = 'copyright';
+              footerContainer.appendChild(footer);
+            }
+          }, 100);
 
           const goBtn = document.getElementById('go-level');
           const levelInput = document.getElementById('level-input');
