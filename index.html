@@ -10,6 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ripple - Daily Cause &amp; Effect Puzzle Game</title>
     <script>
+      // GitHub Pages SPA redirect handler
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+    <script>
       // Level selector - intercept Date to load specific puzzles
       (function() {
         const params = new URLSearchParams(window.location.search);

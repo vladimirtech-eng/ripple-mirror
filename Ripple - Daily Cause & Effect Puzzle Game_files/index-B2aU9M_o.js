@@ -60740,7 +60740,7 @@ const n0e = new v4(),
           children: [
             w.jsx(PU, {}),
             w.jsx(o3, {}),
-            w.jsx(n5, {
+            w.jsx(n5, { basename: "/ripple-mirror",
               children: w.jsxs(e5, {
                 children: [
                   w.jsx(mf, { path: "/", element: w.jsx(vG, {}) }),
