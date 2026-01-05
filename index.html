@@ -136,6 +136,64 @@
             validateLevel();
           }
 
+          // Style "View next puzzle!" as a blue button and make it clickable
+          const nextPuzzleStyle = document.createElement('style');
+          nextPuzzleStyle.textContent = `
+            .next-puzzle-btn {
+              display: inline-block;
+              padding: 12px 24px;
+              background: hsl(var(--primary));
+              color: hsl(var(--primary-foreground));
+              border: none;
+              border-radius: 8px;
+              font-size: 16px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: opacity 0.2s, transform 0.2s;
+              text-decoration: none;
+            }
+            .next-puzzle-btn:hover {
+              opacity: 0.9;
+              transform: translateY(-1px);
+            }
+            .next-puzzle-btn:active {
+              transform: translateY(0);
+            }
+          `;
+          document.head.appendChild(nextPuzzleStyle);
+
+          // Watch for "View next puzzle!" text and convert to button
+          const observer = new MutationObserver(function(mutations) {
+            const nextPuzzleText = Array.from(document.querySelectorAll('p')).find(
+              p => p.textContent.trim() === 'View next puzzle!'
+            );
+            if (nextPuzzleText && !nextPuzzleText.dataset.converted) {
+              nextPuzzleText.dataset.converted = 'true';
+              const params = new URLSearchParams(window.location.search);
+              const currentLvl = parseInt(params.get('level'), 10) || getCurrentDayNumber();
+              const nextLevel = currentLvl + 1;
+
+              const btn = document.createElement('a');
+              btn.href = '?level=' + nextLevel;
+              btn.className = 'next-puzzle-btn';
+              btn.textContent = 'Next Puzzle';
+              btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                try {
+                  const state = JSON.parse(localStorage.getItem('ripple-game-state') || '{}');
+                  const hasSeenTutorial = state.hasSeenTutorial;
+                  localStorage.setItem('ripple-game-state', JSON.stringify({ hasSeenTutorial }));
+                } catch(err) {
+                  localStorage.removeItem('ripple-game-state');
+                }
+                window.location.href = '?level=' + nextLevel;
+              });
+
+              nextPuzzleText.replaceWith(btn);
+            }
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+
           // Add footer - use setTimeout to wait for React to finish rendering
           setTimeout(function() {
             const footerContainer = document.querySelector('.container.max-w-lg') || document.querySelector('.container') || document.getElementById('root');
